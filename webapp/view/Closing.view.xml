@@ -1,0 +1,130 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:form="sap.ui.layout.form" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:html="http://www.w3.org/1999/xhtml" controllerName="project1.controller.Closing">
+  <App id="app">
+    <Page id="_IDGenPage1" title="Online Maßnahmenliste" enableScrolling="true">
+      <subHeader>
+        <OverflowToolbar id="_IDGenOverflowToolbar1">
+          <Button id="_IDGenButton1" icon="sap-icon://nav-back" press=".onBack" text="Zurück zur GB Auswahl"/>
+          <Button id="_IDGenButton2" icon="sap-icon://list" press=".onGoHeader" text="Zurück zum Überblick GB-Zuordnungen"/>
+          <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+          <Button press=".onPrintLocalPreviewPdf" text="PDF Maßnahmenübersicht" id="btnpdf04" tooltip="{i18n>button.PrintLocalPreviewPdf}" type="Emphasized" icon="sap-icon://pdf-attachment"/>
+          <Button press=".onPrintPdf" text="PDF Übersicht Auswahl" id="btnpdf01" tooltip="{i18n>button.PrintPdf}" type="Emphasized" icon="sap-icon://pdf-attachment"/>
+          <Button press=".onPrintAbschPdf" text="PDF Dokumentation" id="btnpdf02" tooltip="{i18n>button.PrintAbschPdf}" type="Emphasized" icon="sap-icon://pdf-attachment"/>
+          <Button press=".onPrintLocalPdf" text="PDF Maßnahmenliste" id="btnpdf03" tooltip="{i18n>button.PrintLocalPdf}" type="Emphasized" icon="sap-icon://pdf-attachment"/>
+        </OverflowToolbar>
+      </subHeader>
+      <content>
+          <Table id="Protokoll02" 
+            sticky="HeaderToolbar,InfoToolbar,ColumnHeaders" 
+            contextualWidth="Auto" 
+            inset="false" 
+            items="{ path: '/ABSCHLIESPROTOKOLSet' }" 
+            updateFinished=".onFinishedList">
+
+		<infoToolbar>
+        <OverflowToolbar id="_IDGenOverflowToolbar2">        
+          <Label id="_IDGenLabel1" text="Teambez.:"/>
+          <Label id="txtTeam" text="" design="Bold"/>
+          <Label id="_IDGenLabel2" text="Job-Profil:"/>
+          <Label id="txtArbeit" text="" design="Bold"/>
+          <Label id="_IDGenLabel3" text="Beschr.:"/>
+          <Label id="txtBeschreibung" text="" design="Bold"/>
+          <Label id="_IDGenLabel4" text="Status:"/>
+          <Label id="txtStatus" text="" design="Bold"/>
+          <Label id="txtDatum" text="" design="Bold"/>
+          <Label id="_IDGenLabel5" text="Auftrag Nr:"/>
+          <Label id="txtAuftrag" design="Bold"/>
+          <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
+        </OverflowToolbar>
+		</infoToolbar>          
+          <columns>
+            <Column id="_IDGenColumn1" vAlign="Top" width="25%">
+                <FlexBox id="FlexBox1"
+                    height="100%"
+                    width="100%"
+                    alignItems="Center"
+                    justifyContent="Center">
+                <VBox id="_IDGenHBox1" alignItems="Start" width="100%">
+                    <HBox id="_IDGenHBox3" alignItems="Center">
+                        <Text id="_IDGenText1" text="Informationen zu Schutzmaßnahmen"/>
+                        <OverflowToolbarButton id="link_internet" type="Transparent" icon="sap-icon://internet-browser" press=".onGoToLinks"/>
+                    </HBox>
+                    <HBox id="_IDGenHBox4" alignItems="Center">
+                        <Text id="_IDGenText7" text="Informationen zur Bedienung"/>
+                        <OverflowToolbarButton id="link_Bedienung" type="Transparent" icon="sap-icon://message-information" press=".onGoToPopupInfomSub1"/>
+                    </HBox>
+                    <HBox id="_IDGenHBox5" alignItems="Center">
+                        <Text id="_IDGenText8" text="Informationen zu Unterweisungen"/>
+                        <OverflowToolbarButton id="link_Unterweisung" type="Transparent" icon="sap-icon://message-information" press=".onGoToPopupInfom2"/>
+                    </HBox>
+                </VBox>
+                <MessageStrip id="_IDGenMessageStrip1" 
+                    text="Hinweis: Bitte Maßnahmenumsetzung erst auf 'Ja' schieben, wenn diese auch tatsächlich erfolgt ist."
+                    type="Warning"
+                    showIcon="false"
+                    showCloseButton="false"
+                    class="sapUiMediumMarginBottom">
+                </MessageStrip>
+			</FlexBox>
+            </Column>
+            <Column id="_IDGenColumn2" vAlign="Top" width="4%">
+                <Text id="_IDGenText2" text="Maßnahme im&#10;aktuellen Jahr&#10;umgesetzt,&#10;zutreffend?"/>
+            </Column>
+            <Column id="_IDGenColumn3" vAlign="Top" width="4%">
+                <Text id="_IDGenText3" text="Im aktuellen&#10;Jahr nicht&#10;erforderlich,&#10;zutreffend?"/>
+            </Column>
+            <Column id="_IDGenColumn4" vAlign="Top" width="4%">
+                <Text id="_IDGenText4" text="Voraussetzung&#10;nicht gegeben,&#10;zutreffend?"/>
+            </Column>
+            <Column id="_IDGenColumn5" vAlign="Top" width="4%">
+              <HBox id="_IDGenHBox2" alignItems="Center" alignContent="End">
+                <Text id="_IDGenText" text="Andere&#10;Gründe,&#10;zutreffend?"/>
+                <OverflowToolbarButton id="info_link" type="Transparent" icon="sap-icon://message-information" press=".onGoToAndereGrunde"/>
+                </HBox>
+            </Column>
+            <Column id="_IDGenColumn6" width="1%"/>
+          </columns>
+            <items>
+              <ColumnListItem id="_IDGenColumnListItem1" vAlign="Top" >
+                <cells>               
+                  <FormattedText id="_IDGenFormattedText1" htmlText="{Schutzmas}" width="100%" height="100%"/>
+                  <Switch id="_IDGenSwitch1" state="{ path: 'Massnameumg', formatter: '.formatter.JaneinState'}" customTextOn="Ja" customTextOff="Nein" change=".onYesNoChanges" class="sapUiTinyMarginTop"/>
+                  <Switch id="_IDGenSwitch2" state="{ path: 'Umgesetz', formatter: '.formatter.JaneinState'}" customTextOn="Ja" customTextOff="Nein" change=".onYesNoChanges" class="sapUiTinyMarginTop"/>
+                  <Switch id="_IDGenSwitch3" state="{ path: 'Massname', formatter: '.formatter.JaneinState'}" customTextOn="Ja" customTextOff="Nein" change=".onYesNoChanges" class="sapUiTinyMarginTop"/>
+                  <Switch id="_IDGenSwitch4" state="{ path: 'SonstigeX', formatter: '.formatter.JaneinState'}" customTextOn="Ja" customTextOff="Nein" change=".onYesNoChanges" class="sapUiTinyMarginTop"/>
+                    <l:VerticalLayout id="_IDGenVerticalLayout1" width="100%" class="gridWrapper" >
+                    <FlexBox id="_IDGenFlexBox1"
+                        direction="Column" 
+                        alignItems="End"
+                        justifyContent="Center">
+                        <Button enabled="false" id="_IDGenTextArea1" 
+                            icon="sap-icon://write-new-document" 
+                            press=".onSubmitDialogPress" 
+                            class="sapUiTinyMarginTop" />
+                    <TextArea id="_IDGenTextArea2" value="{Sonstige}" visible="false" />                              
+                    <Text id="_IDGenText6" width="100%" visible="{= ${Crdat} !== null }" text="{ path: 'Crdat', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd/MM/yyyy'} } - {path: 'Crtim', type: 'sap.ui.model.odata.type.Time', formatOptions: {style: 'short'}} " class="sapUiTinyMarginTop"/>
+
+                    </FlexBox>
+                    </l:VerticalLayout>
+   
+                </cells>
+              </ColumnListItem>
+            </items>
+          </Table>
+
+      </content>
+      <footer>
+        <OverflowToolbar id="_IDGenOverflowToolbar3">
+          <Text id="isSaved" text="" visible="false"/>
+          <ToolbarSpacer id="_IDGenToolbarSpacer3"/>
+          <Button press=".onSaveAbschlisen" 
+                    icon="sap-icon://save" 
+                    text="Bearbeiten Maßnahmenliste abschließen" 
+                    id="btnAbsch" 
+                    tooltip = "Um die Maßnahmenliste abzuschließen, muss zu jeder Schutzmaßnahme eine Frage beantwortet sein."
+                    visible="true"/>
+          <Button press=".onSaveDaten" icon="sap-icon://save" text="Zwischenspeichern" id="btnSave" visible="true"/>
+        </OverflowToolbar>
+      </footer>
+    </Page>
+  </App>
+</mvc:View>

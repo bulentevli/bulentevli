@@ -1,0 +1,277 @@
+<mvc:View xmlns:form="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified"
+  xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" height="100%" controllerName="project1.controller.Object">
+  <App id="app">
+    <Page id="page" title="GB Auswahl der für den Arbeitsplatz zutreffenden Gefährdungsbeurteilungen">
+      <subHeader>
+        <OverflowToolbar id="_IDGenOverflowToolbar1">
+          <Button id="_IDGenButton1" press=".onBack" icon="sap-icon://nav-back" text="Zurück zum Überblick GB-Zuordnungen"/>
+          <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+          <Button press=".onApproveSave" text="Sichern" icon="sap-icon://save" id="btnsave" visible="true"/>
+          <Button press=".onNextAktion" text="zur Online Maßnahmenliste" icon="sap-icon://action" visible="true" id="btnNext"/>
+        </OverflowToolbar>
+      </subHeader>
+      <content>
+      
+        <OverflowToolbar id="_IDGenOverflowToolbar2">
+          <Label id="_IDGenLabel1" text="Teambez.:"/>
+          <Label id="txtTeam" text="" design="Bold"/>
+          <Label id="_IDGenLabel2" text="Job-Profil.:"/>
+          <Label id="txtArbeit" text="" design="Bold"/>
+          <Label id="_IDGenLabel3" text="Auftrag Nr:"/>
+          <Label id="txtAuftrag" text="" design="Bold"/>
+          <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
+
+        </OverflowToolbar>
+        <MessageStrip id="_IDGenMessageStrip1" class="sapUiSmallMarginBottom"
+          text="Die Auswahl kann jederzeit unterbrochen und später wieder aufgenommen werden. Dazu bitte den aktuellen Stand unter „Sichern“ speichern. Alle für das Team erstellten Dokumente können unter „Überblick GB Zuordnungen“ wieder aufgerufen
+ werden.
+Von dort können Sie über den Button „Neue GB-Zuordnung erstellen“ eine neue Auswahl beginnen. Wenn Sie den Button während einer aktuellen Eingabe verwenden, ohne diese vorher zu speichern, gehen die bisher getätigten Eingaben verloren."
+          showIcon="false"/>
+        <Wizard id="CreateWizard" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" finishButtonText="Auswahl Abschließen"
+          complete=".onFinalEvent" height="85%">
+          <WizardStep id="Step1" title="Kopfdaten" validated="false" icon="sap-icon://home" complete="onGetTatigkeitList">
+            <MessageStrip id="_IDGenMessageStrip2" class="sapUiSmallMarginBottom" text="Für welches Team soll die Auswahl erstellt werden?" showIcon="false">
+              <Link id="_IDGenLink1" text="Rechtlicher Hinweis" press="onLinkPress"/>
+            </MessageStrip>
+            <form:SimpleForm editable="true" layout="ResponsiveGridLayout" id="headerForm" width="100%" tooltip="Eingabe der Daten für eine neue GB">
+              <Label id="_IDGenLabel4" text="Teambezeichnung" labelFor="Teambezeichnung" required="true"/>
+              <ComboBox valueState="Error" showValueStateMessage="false" id="Teambezeichnung" items="{ path: '/TEAMPLANSet'}" width="100%"
+                change=".OnTeambezeichnungSuggest" class="sapUiSmallMarginBottom"  >
+                <core:Item id="_IDGenItem1" text="{Orgetxt} ({Gbukrs})" key="{Orgetxt} ({Gbukrs})"/>
+              </ComboBox>
+              <Button id="_IDGenButton2" icon="sap-icon://message-information" type="Transparent" press="onInfomationPress1" width="10px"/>
+              <Label id="_IDGenLabel5" text="Erstelldatum" required="true"/>
+              <DatePicker id="Erstellungsdatum" valueStateText="Erstellungsdatum" valueState="None" displayFormat="dd/MM/yyyy" width="50%"
+                change=".additionalInfoValidation" class="sapUiSmallMarginBottom" editable="false"/>
+              <Label id="_IDGenLabel6" text="Job-Profil" required="true"/>
+            <ComboBox valueState="Error" showValueStateMessage="false" id="Tatigkeitsbezeichnung" items="{ path: '/ARBEITSSTELLENSet'}" width="100%" change=".OnArbeitsstellenbezeichnungSuggest" class="sapUiSmallMarginBottom">
+            <core:Item id="_IDGenItem2" text="{ArbeitTxt}" key="{ArbeitTxt}"/>
+            </ComboBox>
+              <Button id="_IDGenButton3" icon="sap-icon://message-information" type="Transparent" press="onInfomationPress2" width="10px"/>
+              <Label id="_IDGenLabel7" text="Beschreibung"/>
+              <Input width="100%" id="Beschreibung" value="{/Beschreib}" class="sapUiSmallMarginBottom" change=".additionalInfoValidation" maxLength="100"/>
+              <Button id="_IDGenButton4" icon="sap-icon://message-information" type="Transparent" press="onInfomationPress3" width="10px"/>
+            </form:SimpleForm>
+            <core:Icon id="_IDGenIcon1" src="sap-icon://message-information" press=".onIconHelpPress" size="2rem" class="sapUiSmallMarginBottom" color="#FF0000"
+              visible="false"/>
+          </WizardStep>
+          <WizardStep id="Step2" title="Tätigkeiten" complete="checkontatigkeit">
+            <MessageStrip id="_IDGenMessageStrip3" class="sapUiSmallMarginBottom" text="Was wird gearbeitet?" showIcon="false"/>
+            <Text id="_IDGenText1" class="sapUiSmallMarginBottom"
+              text="Alle Arbeitsplätze bei der Telekom beinhalten Büro- und Bildschirmtätigkeiten. Deshalb ist diese Tätigkeit bereits vorbelegt. Bitte wählen Sie maximal eine weitere zutreffende Tätigkeit für den betrachteten Arbeitsplatz aus."/>
+            <List mode="MultiSelect" items="{ path: '/TATIGKEITSet' }" id="tatigkeitList" updateFinished="onFinishedTatigkeitList"
+              selectionChange=".onListSelectionChange" noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung."
+              select=".onSelectedTatigkeitList">
+              <StandardListItem id="_IDGenStandardListItem1" title="{GbName}"/>
+            </List>
+            <MessageStrip id="_IDGenMessageStrip4" class="sapUiSmallMarginBottom" text="Betriebseinrichtungen sind in dieser Auswahl nicht vorgesehen" showIcon="false"
+              visible="false"/>
+          </WizardStep>
+          <WizardStep id="Step3" title="Arbeitszeiten" complete=".checkonArbeitszeiten">
+            <MessageStrip id="_IDGenMessageStrip5" class="sapUiSmallMarginBottom" text="Wann wird gearbeitet?" showIcon="false"/>
+            <Text id="_IDGenText2" class="sapUiSmallMarginBottom"
+              text="Wenn bei dem betrachteten Arbeitsplatz eine besondere Arbeitszeit vorliegt, wählen Sie bitte die zutreffende Arbeitszeit aus."/>
+            <List mode="MultiSelect" items="{ path: '/AUSWAHLMASKESet' }" id="ArbeitszeitenList01" updateFinished=".onUpdateFinished"
+              select=".onSelectionCheck" selectionChange=".onListSelectionChange"
+              noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung.">
+              <StandardListItem id="_IDGenStandardListItem2" title="{GbName}"/>
+            </List>
+            <MessageStrip id="_IDGenMessageStrip6" class="sapUiSmallMarginBottom" text="Arbeitszeiten sind in dieser Auswahl nicht vorgesehen" showIcon="false" visible="false"/>
+          </WizardStep>
+          <WizardStep id="Step4" title="Einsatzorte" complete=".checkonEinsatzorte">
+            <MessageStrip id="_IDGenMessageStrip7" class="sapUiSmallMarginBottom" text="Wo wird gearbeitet?" showIcon="false"/>
+            <Text id="_IDGenText3" class="sapUiSmallMarginBottom"
+              text="Bitte wählen Sie die für den betrachteten Arbeitsplatz zutreffenden Einsatzorte aus. Mehrfachauswahl ist möglich."/>
+            <List mode="MultiSelect" items="{ path: '/AUSWAHLMASKESet' }" id="EinsatzorteList01" updateFinished=".onUpdateFinished"
+              selectionChange=".onListSelectionChange" select=".onSelectionCheck"
+              noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung.">
+              <StandardListItem id="_IDGenStandardListItem3" title="{GbName}"/>
+            </List>
+            <MessageStrip id="_IDGenMessageStrip8" class="sapUiSmallMarginBottom" text="Einsatzorte sind in dieser Auswahl nicht vorgesehen" showIcon="false" visible="false"/>
+          </WizardStep>
+          <WizardStep id="Step5" title="Arbeitsmittel" complete=".checkonArbeitsmittel">
+            <MessageStrip id="_IDGenMessageStrip9" class="sapUiSmallMarginBottom" text="Womit wird gearbeitet?" showIcon="false"/>
+            <Text id="_IDGenText4" class="sapUiSmallMarginBottom"
+              text="Bitte wählen Sie aus, welche Arbeitsmittel bei dem betrachteten Arbeitsplatz verwendet werden. Mehrfachauswahl ist möglich."/>
+            <List mode="MultiSelect" items="{ path: '/AUSWAHLMASKESet' }" id="ArbeitsmittelList01" updateFinished=".onUpdateFinished"
+              select=".onSelectionCheck" selectionChange=".onListSelectionChange" 
+              noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung.">
+              <StandardListItem id="_IDGenStandardListItem4" title="{GbName}"/>
+            </List>
+            <MessageStrip id="_IDGenMessageStrip10" class="sapUiSmallMarginBottom" text="Arbeitsmittel sind in dieser Auswahl nicht vorgesehen. Sie werden über eine Maßnahme in der GB Büro- u. Bildschirmtätigkeiten bereitgestellt" showIcon="false"/>
+          </WizardStep>
+          <WizardStep id="Step6" title="Betriebseinrichtungen" complete=".checkonBetriebseinrichtungen">
+            <MessageStrip id="_IDGenMessageStrip11" class="sapUiSmallMarginBottom" text="Woran wird gearbeitet?" showIcon="false"/>
+            <Text id="_IDGenText5" class="sapUiSmallMarginBottom"
+              text="Bitte wählen Sie aus, welche Betriebseinrichtungen verwendet werden. Mehrfachauswahl ist möglich."/>
+            <List mode="MultiSelect" items="{ path: '/AUSWAHLMASKESet' }" id="BetriebseinrichtungenList01" updateFinished=".onUpdateFinished"
+              select=".onSelectionCheck" selectionChange=".onListSelectionChange"
+              noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung.">
+              <StandardListItem id="_IDGenStandardListItem5" title="{GbName}"/>
+            </List>
+            <MessageStrip id="_IDGenMessageStrip12" class="sapUiSmallMarginBottom" text="Betriebseinrichtungen sind in dieser Auswahl nicht vorgesehen" showIcon="false"
+              visible="false"/>
+          </WizardStep>
+          <WizardStep id="Step7" title="Abschließende Fragen">
+            <Text id="_IDGenText6" class="sapUiSmallMarginBottom" text="Bitte wählen Sie zu jedem nachfolgenden Thema eine zutreffende Antwort aus."/>
+            <Table mode="SingleSelectLeft" headerText="GEFAHRSTOFFE" updateFinished=".onUpdateFinished" selectionChange=".onListSelectionChange"
+              noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung." select=".onSelectionTableCheck"
+              items="{ path:'/FRAGENSet', filters : [ { path : 'Thema', operator : 'EQ', value1 : 'GEFAHRSTOFFE'} ] }" id="Frage00">
+              <headerToolbar>
+                <OverflowToolbar id="_IDGenOverflowToolbar3">
+                  <content>
+                    <Title id="_IDGenTitle1" text="GEFAHRSTOFFE" level="H2"/>
+                    <ToolbarSpacer id="_IDGenToolbarSpacer3"/>
+                    <Link id="_IDGenLink2" text="weitere Infos" target="_blank"
+                      href="https://personal.telekom.de/fuehrungsaufgaben/soziales-gesundheit-arbeitsschutz/arbeitsschutz/gefahrstoffmanagement"/>
+                  </content>
+                </OverflowToolbar>
+              </headerToolbar>
+              <columns>
+                <Column id="_IDGenColumn1"/>
+              </columns>
+              <ColumnListItem id="_IDGenColumnListItem1">
+                <ObjectIdentifier id="_IDGenObjectIdentifier1" title="{Auswhl}"/>
+              </ColumnListItem>
+            </Table>
+            <Table mode="SingleSelectLeft" updateFinished=".onUpdateFinished"
+              noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung." select=".onSelectionTableCheck"
+              items="{ path:'/FRAGENSet', filters : [ { path : 'Thema', operator : 'EQ', value1 : 'MUTTERSCHUTZ'} ] }" id="Frage01">
+              <headerToolbar>
+                <OverflowToolbar id="_IDGenOverflowToolbar8">
+                  <content>
+                    <Title id="_IDGenTitle4" text="MUTTERSCHUTZ" level="H2"/>
+                    <ToolbarSpacer id="_IDGenToolbarSpacer8"/>
+                    <Link id="_IDGenLink5" text="weitere Infos" target="_blank"
+                      href="https://personal.telekom.de/fuehrungsaufgaben/soziales-gesundheit-arbeitsschutz/arbeitsschutz/gefaehrdungsbeurteilung/gefaehrdungsbeurteilung-mutterschutz/gefaehrdungsbeurteilung--1009354"/>                            
+                  </content>
+                </OverflowToolbar>
+              </headerToolbar>              
+              <columns>
+                <Column id="_IDGenColumn2"/>
+              </columns>
+              <ColumnListItem id="_IDGenColumnListItem2">
+                <ObjectIdentifier id="_IDGenObjectIdentifier2" title="{Auswhl}"/>
+              </ColumnListItem>
+            </Table>
+            <Table mode="SingleSelectLeft" headerText="ENTFLUCHTUNG VON MENSCHEN MIT BEHINDERUNGEN" updateFinished=".onUpdateFinished"
+              select=".onSelectionTableCheck" noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung."
+              items="{ path:'/FRAGENSet', filters : [ { path : 'Thema', operator : 'EQ', value1 : 'ENTFLUCHTUNG VON MENSCHEN MIT BEHINDERUNGEN'} ] }"
+              id="Frage02">
+              <headerToolbar>
+                <OverflowToolbar id="_IDGenOverflowToolbar4">
+                  <content>
+                    <Title id="_IDGenTitle2" text="ENTFLUCHTUNG VON MENSCHEN MIT BEHINDERUNGEN" level="H2"/>
+                    <ToolbarSpacer id="_IDGenToolbarSpacer4"/>
+                    <Link id="_IDGenLink3" text="weitere Infos" target="_blank"
+                      href="https://personal.telekom.de/mitarbeiter-infos/soziales-gesundheit-arbeitsschutz/arbeitsschutz/gefaehrdungsbeurteilung/gefaehrdungsbeurteilung-1111378"/>                            
+                  </content>
+                </OverflowToolbar>
+              </headerToolbar>
+              <columns>
+                <Column id="_IDGenColumn3"/>
+              </columns>
+              <ColumnListItem id="_IDGenColumnListItem3">
+                <ObjectIdentifier id="_IDGenObjectIdentifier3" title="{Auswhl}"/>
+              </ColumnListItem>
+            </Table>
+            <Table mode="SingleSelectLeft" headerText="ARBEITSPLATZAUSSTATTUNG FÜR MENSCHEN MIT BEHINDERUNGEN" updateFinished=".onUpdateFinished"
+              noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung." select=".onSelectionTableCheck"
+              items="{ path:'/FRAGENSet', filters : [ { path : 'Thema', operator : 'EQ', value1 : 'ARBEITSPLATZAUSSTATTUNG FÜR MENSCHEN MIT BEHINDERUNGEN'} ] }"
+              id="Frage05">
+              <columns>
+                <Column id="_IDGenColumn4"/>
+              </columns>
+              <ColumnListItem id="_IDGenColumnListItem4">
+                <ObjectIdentifier id="_IDGenObjectIdentifier4" title="{Auswhl}"/>
+              </ColumnListItem>
+            </Table>
+            <Table mode="SingleSelectLeft" noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung."
+              updateFinished=".onUpdateFinished" select=".onSelectionTableCheck"
+              items="{ path:'/FRAGENSet', filters : [ { path : 'Thema', operator : 'EQ', value1 : 'JUGENDLICHE'} ] }" id="Frage03">
+              <headerToolbar>
+                <OverflowToolbar id="_IDGenOverflowToolbar">
+                  <content>
+                    <Title id="_IDGenTitle8" text="JUGENDLICHE" level="H2"/>
+                    <ToolbarSpacer id="_IDGenToolbarSpacer"/>
+                    <Link id="_IDGenLink9" text="Jugendarbeitsschutzgesetz" target="_blank"
+                      href="https://personal.telekom.de/fuehrungsaufgaben/soziales-gesundheit-arbeitsschutz/arbeitsschutz/aushaenge-arbeitsschutzgesetzte"/>                            
+                  </content>
+                </OverflowToolbar>
+              </headerToolbar>
+              <columns>
+                <Column id="_IDGenColumn5"/>
+              </columns>
+              <ColumnListItem id="_IDGenColumnListItem5">
+                <ObjectIdentifier id="_IDGenObjectIdentifier5" title="{Auswhl}"/>
+              </ColumnListItem>
+            </Table>
+            <Table mode="SingleSelectLeft" updateFinished=".onUpdateFinishedWithGoMoreDetail"
+              noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung." selectionChange=".onGoMoreDetail"
+              select=".onSelectionTableCheck"
+              items="{ path:'/FRAGENSet', filters : [ { path : 'Thema', operator : 'EQ', value1 : 'ALLES VOLLSTÄNDIG?'} ] }" id="Frage04">
+              <headerToolbar>
+                <OverflowToolbar id="_IDGenOverflowToolbar5" >
+                  <Title id="_IDGenTitle3" text="ALLES VOLLSTÄNDIG?" level="H2"/>
+                  <ToolbarSpacer id="_IDGenToolbarSpacer5"/>
+                  <Link id="fasilink" tooltip="zum FASi" text="Kontakt FASi" target="_blank"
+                    href="https://personal.telekom.de/mitarbeiter-infos/soziales-gesundheit-arbeitsschutz/kontakt/kontakte-fachkraefte-arbeitssicherheit"
+                    visible="true"/>
+                </OverflowToolbar>
+              </headerToolbar>
+              <columns>
+                <Column id="_IDGenColumn6"/>
+              </columns>
+              <ColumnListItem id="_IDGenColumnListItem6" >
+                <ObjectIdentifier id="_IDGenObjectIdentifier6" title="{Auswhl}"/>
+              </ColumnListItem>
+            </Table>
+            <Table noDataText="Zu diesem Auswahlblock stehen keine auswählbaren Inhalte zur Verfügung." alternateRowColors="true" items="{ path:'/EXTRASet' }" id="Frage06">
+              <headerToolbar>
+                <OverflowToolbar id="_IDGenOverflowToolbar6" >
+                  <ToolbarSpacer id="_IDGenToolbarSpacer6"/>
+                  <Button text="Ergänzende Maßnahmen" type="Transparent" tooltip="Hiermit legen Sie jeweils eine weitere Eingabezeile an." icon="sap-icon://add"
+                    press=".onAddLine" id="addButton"/>
+                </OverflowToolbar>
+              </headerToolbar>
+              <columns>
+                <Column id="_IDGenColumn7" width="24%">
+                  <header><Text id="_IDGenText7" text="Gefährdungsfaktor"/></header>
+                </Column>
+                <Column id="_IDGenColumn8" width="24%">
+                  <header><Text id="_IDGenText8" text="Risiko"/></header>
+                </Column>
+                <Column id="_IDGenColumn9" width="24%">
+                  <header><Text id="_IDGenText9" text="Gefährdung"/></header>
+                </Column>
+                <Column id="_IDGenColumn10" width="24%">
+                  <header><Text id="_IDGenText10" text="Schutzmaßnahme"/></header>
+                </Column>
+                <Column id="_IDGenColumn11" hAlign="End" width="4%">
+                  <header><Text id="_IDGenText11" text=""/></header>
+                </Column>
+              </columns>
+              <items>
+                <ColumnListItem id="_IDGenColumnListItem7" >
+                  <cells>
+                    <TextArea growing="true" value="{GefaehrdungNr}" growingMaxLines="7" width="100%" rows="8" maxLength="255"/>
+                    <TextArea growing="true" value="{DomvalueL}" growingMaxLines="7" width="100%" rows="8" maxLength="255"/>
+                    <TextArea growing="true" value="{Code}" growingMaxLines="7" width="100%" rows="8" maxLength="255"/>
+                    <TextArea growing="true" value="{SchutzmassnahmenNr}" growingMaxLines="7" width="100%" rows="8" maxLength="255"/>
+                    <Button id="_IDGenButton5" icon="sap-icon://delete" press=".onDelLine"/>
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+          </WizardStep>
+        </Wizard>
+      </content>
+      <footer>
+        <OverflowToolbar id="_IDGenOverflowToolbar7">
+          <Text id="isSaved" text="" visible="false"/>
+          <ToolbarSpacer id="_IDGenToolbarSpacer7"/>
+        </OverflowToolbar>
+      </footer>
+    </Page>
+  </App>
+</mvc:View>

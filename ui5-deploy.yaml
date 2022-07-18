@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "2.5"
+metadata:
+  name: project1
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: HSD
+          url: http://he106457.emea1.cds.t-internal.com:50443
+        app:
+          name: ZFIORI06
+          description: Auswahl der für den Arbeitsplatz zutreffenden Gefährdungs
+          package: ZFIORI01
+          transport: HSDK902875

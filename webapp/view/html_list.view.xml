@@ -1,0 +1,32 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:form="sap.ui.layout.form" xmlns="sap.m"
+controllerName="project1.controller.html_list">
+  <App id="app">
+    <Page id="page" title="{i18n>title}">
+      <content>
+        <Table id="Protokoll02" inset="false" items="{ path: '/ABSCHLIESPROTOKOLSet' }" >
+          <columns>
+            <Column id="_IDGenColumn1" width="15%"/>
+            <Column id="_IDGenColumn2" width="15%"/>
+            <Column id="_IDGenColumn3" width="15%"/>
+            <Column id="_IDGenColumn4" width="15%"/>
+            <Column id="_IDGenColumn5" width="15%"/>
+            <Column id="_IDGenColumn6" width="10%"/>
+          </columns>
+          <items>
+            <ColumnListItem id="_IDGenColumnListItem1">
+              <cells>
+                <Text id="_IDGenText1" text="{Schutzmas}"/>
+                <Text id="_IDGenText2" text="{Massnameumg}"/>
+                <Text id="_IDGenText3" text="{Umgesetz}"/>
+                <Text id="_IDGenText4" text="{Massname}"/>
+                <Text id="_IDGenText5" text="{Sonstige}"/>
+                  <Text id="_IDGenText6" visible="{= ${Crdat} !== null }"
+                    text="{ path: 'Crdat', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd/MM/yyyy'} } - {path: 'Crtim', type: 'sap.ui.model.odata.type.Time', formatOptions: {style: 'short'}} "/>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+      </content>
+    </Page>
+  </App>
+</mvc:View>

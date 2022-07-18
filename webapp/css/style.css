@@ -1,0 +1,22 @@
+
+
+.smallLabel {
+  font-size: 8px ;
+}
+
+.linkBgColor{
+	background-color: yellow;
+}
+
+.sapMGHLITitle{
+        font-weight: bold;
+        font-size: 1.25rem;
+        text-decoration: underline;
+  }
+
+.sapMMessageToastRed{
+    background:yellow !important;
+    color: black;
+}
+
+ 

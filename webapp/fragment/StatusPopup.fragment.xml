@@ -1,0 +1,8 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core">
+	<ResponsivePopover id="_IDGenResponsivePopover1" class="sapUiContentPadding" placement="Bottom">
+		<List id="_IDGenList1">
+			<ObjectListItem id="_IDGenObjectListItem1" title="Änderbar" icon="sap-icon://edit"/>
+			<ObjectListItem id="_IDGenObjectListItem2" title="Nicht Änderbar" icon="sap-icon://search"/>
+		</List>
+	</ResponsivePopover>
+</core:FragmentDefinition>

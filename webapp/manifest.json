@@ -1,0 +1,133 @@
+{
+  "_version": "1.14.0",
+  "sap.app": {
+    "id": "project1",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZFIORI01_SRV/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.65.0",
+      "libs": {
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "project1.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "project1.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false
+      },
+      "routes": [{
+        "pattern": "",
+        "name": "worklist",
+        "target": ["worklist"]
+    }, {
+        "pattern": "object/{guid},{step},{burks}",
+        "name": "object",
+        "target": ["object"]
+    }, {
+        "name": "closing",
+        "pattern": "closing/{guid},{first}",
+        "titleTarget": "",
+        "greedy": false,
+        "target": ["closing"]
+    }],
+      "targets": {
+        "worklist": {
+            "viewName": "Worklist",
+            "viewId": "worklist",
+            "viewLevel": 1,
+            "title": "{i18n>worklistViewTitle}"
+        },
+        "object": {
+            "viewName": "Object",
+            "viewId": "object",
+            "viewLevel": 2,
+            "title": "{i18n>objectViewTitle}"
+        },
+        "objectNotFound": {
+            "viewName": "ObjectNotFound",
+            "viewId": "objectNotFound"
+        },
+        "notFound": {
+            "viewName": "NotFound",
+            "viewId": "notFound"
+        },
+        "closing": {
+            "viewType": "XML",
+            "transition": "slide",
+            "clearAggregation": true,
+            "viewName": "Closing"
+        }
+    }
+    },
+    "rootView": {
+      "viewName": "project1.view.Worklist",
+      "type": "XML",
+      "async": true,
+      "id": "Worklist"
+    }
+  }
+}

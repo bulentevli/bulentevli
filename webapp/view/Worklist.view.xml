@@ -1,0 +1,114 @@
+<mvc:View
+    controllerName="project1.controller.Worklist"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+  <Page id="page" title="{i18n>title}" enableScrolling="false">
+    <subHeader>
+      <OverflowToolbar id="_IDGenOverflowToolbar1">
+        <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+        <Button press=".onClear" text="{i18n>button.lable.NeueAuswahl}" tooltip="{i18n>button.lable.NeueAuswahl}" icon="sap-icon://document"
+          id="btnClear" visible="true"/>
+      </OverflowToolbar>
+    </subHeader>
+    <content>
+        <Table id="_IDGenTable1" showNoData="false">
+          <columns>
+            <Column id="_IDGenColumn1"/>
+            <Column id="_IDGenColumn2" width="10em">
+              <header>
+                <Text id="_IDGenText1" text="{i18n>header.label.Teambezeich}"/>
+              </header>
+            </Column>
+            <Column id="_IDGenColumn3" width="7em">
+              <header>
+                <Text id="_IDGenText2" text="{i18n>header.label.Erstelldatum}"/>
+              </header>
+            </Column>
+            <Column id="_IDGenColumn4" width="15em">
+              <header>
+                <Text id="_IDGenText3" text="{i18n>header.label.Arbeitsplatzbezeichnung}"/>
+              </header>
+            </Column>
+            <Column id="_IDGenColumn5" width="12em" demandPopin="true" minScreenWidth="tablet">
+              <header>
+                <Text id="_IDGenText4" text="{i18n>header.label.Status}"/>
+              </header>
+            </Column>
+            <Column id="_IDGenColumn6" width="9em" demandPopin="true" minScreenWidth="tablet">
+              <header>
+                <Text id="_IDGenText5" text="Beschreibung"/>
+              </header>
+            </Column>
+            <Column id="_IDGenColumn7" width="7em" hAlign="Center" demandPopin="true" minScreenWidth="tablet">
+              <header>
+                <Text id="_IDGenText6" text="{i18n>header.label.ÜbersichtAuswahl}"/>
+              </header>
+            </Column>
+            <Column id="_IDGenColumn8" hAlign="Center" demandPopin="true" minScreenWidth="tablet">
+              <header>
+                <Text id="_IDGenText7" text="{i18n>header.label.Dokumantation}"/>
+              </header>
+            </Column>
+            <Column id="_IDGenColumn9" hAlign="Center" demandPopin="true" minScreenWidth="tablet">
+              <header>
+                <Text id="_IDGenText8" text="{i18n>header.label.Maßnahmenliste}"/>
+              </header>
+            </Column>
+            <Column id="_IDGenColumn10" hAlign="Center" demandPopin="true" minScreenWidth="tablet">
+              <header>
+                <Text id="_IDGenText9" text="{i18n>header.label.Auftrag}"/>
+              </header>
+            </Column>
+          </columns>
+        </Table>
+      <ScrollContainer id="oScrollContainer" vertical="true" focusable="true" height="95%">
+        <Table noDataText="Nichts gefunden" inset="false" id="AuftragListe"
+          items="{ path : '/KOPFDATENSet', sorter : { path : 'Crdat', descending : false } }" updateFinished=".onUpdateFinished">
+          <ColumnListItem id="_IDGenColumnListItem1" >
+            <cells>
+              <HBox id="_IDGenHBox1">
+                <Button id="_IDGenButton1" icon="{ path: 'Status', formatter: '.formatter.statusIcon'}" type="Transparent" tooltip="{ path: 'Status', formatter: '.formatter.statusAltText'}" press=".onDetail"/>
+                <Button id="_IDGenButton3" icon="sap-icon://delete" type="Transparent" tooltip="{i18n>button.lable.AuswahlLöschen}" press=".onApproveDelete"/>
+                <Button id="_IDGenButton2" icon="sap-icon://copy" type="Transparent" tooltip="{i18n>button.lable.AuswahlKopieren}" press=".onCopy"
+                  visible="{ parts: [ {path: 'Status'}, {path: 'Erstelldatum'} ] , formatter: '.formatter.CopyControl'}"/>
+
+              </HBox>
+              <Text id="_IDGenText10" text="{Teambezeich}"/>
+              <Text id="_IDGenText11" text="{path : 'Erstelldatum', type:'sap.ui.model.type.Date', formatOptions: { pattern: 'dd/MM/yyyy' } } "/>
+              <Text id="_IDGenText12" text="{Tatigkeits}"/>
+              <Text id="_IDGenText13" text="{ path: 'Status', formatter: '.formatter.statusText' }"/>
+              <Text id="_IDGenText14" text="{Beschreib}" />
+              <Button id="_IDGenButton4" icon="sap-icon://pdf-attachment" tooltip="{i18n>tooltip.ÜbersichtAuswahl}" press=".onPrintPdf" visible="{= ${Status} !== '00'}"/>
+              <Button id="_IDGenButton5" icon="sap-icon://pdf-attachment" tooltip="{i18n>tooltip.Dokumantation}" press=".onPrintAbschPdf" visible="{= ${Status} !== '00'}"/>
+              <Button id="_IDGenButton6" icon="sap-icon://pdf-attachment" tooltip="{i18n>tooltip.Maßnahmenliste}" press=".onPrintLocalPdf" visible="{= ${Status} === '02'}"/>
+              <Text id="_IDGenText15" text="{Aufnr}"/>
+            </cells>
+          </ColumnListItem>
+          <columns>
+            <Column id="_IDGenColumn11"/>
+            <Column id="_IDGenColumn12" width="10em"/>
+            <Column id="_IDGenColumn13" width="7em"/>
+            <Column id="_IDGenColumn14" width="15em"/>
+            <Column id="_IDGenColumn15" width="12em" demandPopin="true" minScreenWidth="tablet"/>
+            <Column id="_IDGenColumn16" width="9em" demandPopin="true" minScreenWidth="tablet"/>
+            <Column id="_IDGenColumn17" width="7em" hAlign="Center" demandPopin="true" minScreenWidth="tablet"/>
+            <Column id="_IDGenColumn18" hAlign="Center" demandPopin="true" minScreenWidth="tablet"/>
+            <Column id="_IDGenColumn19" hAlign="Center" demandPopin="true" minScreenWidth="tablet"/>
+            <Column id="_IDGenColumn20" hAlign="Center" demandPopin="true" minScreenWidth="tablet"/>
+          </columns>
+        </Table>
+      </ScrollContainer>
+    </content>
+		<footer>
+ 
+		</footer>
+	</Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>
